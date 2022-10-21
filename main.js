@@ -1,18 +1,18 @@
-import * as THREE from 'https://cdn.skypack.dev/three@0.138.0';
-import { EffectComposer } from 'https://unpkg.com/three@0.138.0/examples/jsm/postprocessing/EffectComposer.js';
-import { FullScreenQuad } from 'https://unpkg.com/three@0.138.0/examples/jsm/postprocessing/Pass.js';
-import { ShaderPass } from 'https://unpkg.com/three@0.138.0/examples/jsm/postprocessing/ShaderPass.js';
-import { SMAAPass } from 'https://unpkg.com/three@0.138.0/examples/jsm/postprocessing/SMAAPass.js';
-import { GammaCorrectionShader } from 'https://unpkg.com/three@0.138.0/examples/jsm/shaders/GammaCorrectionShader.js';
+import * as THREE from 'https://cdn.skypack.dev/three@0.142.0';
+import { EffectComposer } from 'https://unpkg.com/three@0.142.0/examples/jsm/postprocessing/EffectComposer.js';
+import { FullScreenQuad } from 'https://unpkg.com/three@0.142.0/examples/jsm/postprocessing/Pass.js';
+import { ShaderPass } from 'https://unpkg.com/three@0.142.0/examples/jsm/postprocessing/ShaderPass.js';
+import { SMAAPass } from 'https://unpkg.com/three@0.142.0/examples/jsm/postprocessing/SMAAPass.js';
+import { GammaCorrectionShader } from 'https://unpkg.com/three@0.142.0/examples/jsm/shaders/GammaCorrectionShader.js';
 import { EffectShader } from "./EffectShader.js";
-import { OrbitControls } from 'https://unpkg.com/three@0.138.0/examples/jsm/controls/OrbitControls.js';
-import { TeapotGeometry } from 'https://unpkg.com/three@0.138.0/examples/jsm/geometries/TeapotGeometry.js';
-import * as BufferGeometryUtils from 'https://unpkg.com/three@0.138.0/examples/jsm/utils/BufferGeometryUtils.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.142.0/examples/jsm/controls/OrbitControls.js';
+import { TeapotGeometry } from 'https://unpkg.com/three@0.142.0/examples/jsm/geometries/TeapotGeometry.js';
+import * as BufferGeometryUtils from 'https://unpkg.com/three@0.142.0/examples/jsm/utils/BufferGeometryUtils.js';
 import * as MeshBVHLib from 'https://unpkg.com/three-mesh-bvh@0.5.10/build/index.module.js';
 import {
     GLTFLoader
-} from 'https://unpkg.com/three@0.138.0/examples/jsm/loaders/GLTFLoader.js';
-import { MeshoptDecoder } from 'https://unpkg.com/three@0.138.0/examples/jsm/libs/meshopt_decoder.module.js';
+} from 'https://unpkg.com/three@0.142.0/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'https://unpkg.com/three@0.142.0/examples/jsm/libs/meshopt_decoder.module.js';
 import { DRACOLoader } from 'https://unpkg.com/three@0.142.0/examples/jsm/loaders/DRACOLoader.js';
 import {
     MeshBVH,
@@ -24,7 +24,7 @@ import {
     SAH
 } from 'https://unpkg.com/three-mesh-bvh@0.5.10/build/index.module.js';
 import { AssetManager } from './AssetManager.js';
-import { GUI } from 'https://unpkg.com/three@0.138.0/examples/jsm/libs/lil-gui.module.min.js';
+import { GUI } from 'https://unpkg.com/three@0.142.0/examples/jsm/libs/lil-gui.module.min.js';
 import { Stats } from "./stats.js";
 const makeSDFTexture = (bvh, box, resolution = 1.0) => {
     const xSize = Math.floor((box.max.x - box.min.x) * resolution);
@@ -96,6 +96,8 @@ const makeSDFTextureGPU = (bvh, box, resolution, renderer, mesh) => {
     const xSize = Math.floor((box.max.x - box.min.x) * resolution);
     const ySize = Math.floor((box.max.y - box.min.y) * resolution);
     const zSize = Math.floor((box.max.z - box.min.z) * resolution);
+    console.log(xSize, ySize, zSize);
+
     const volumeData = new Float32Array(xSize * ySize * zSize);
     const positions = [];
     for (let z = box.min.z; z < box.max.z; z += (1 / resolution)) {
@@ -514,7 +516,7 @@ async function main() {
     const boundingBox = new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(0, 20, 0), new THREE.Vector3(50, 40, 50));
     const boundingBoxHelper = new THREE.Box3Helper(boundingBox, 0xffff00);
     const sponza = (await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).setDRACOLoader(new DRACOLoader().setDecoderPath("./")).loadAsync("LittlestTokyo.glb")).scene;
-    sponza.scale.set(0.25, 0.25, 0.25);
+    sponza.scale.set(0.48, 0.48, 0.48);
     sponza.traverse(object => {
         if (object.isMesh && object.material) {
             if (object.material.color.r === 0.01361838816699617) {
