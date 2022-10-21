@@ -455,7 +455,7 @@ async function main() {
         "skybox/Box_Back.bmp"
     ]);
     environment.encoding = THREE.sRGBEncoding;
-    //scene.background = environment;
+    scene.background = environment;
     // Lighting
     const ambientLight = new THREE.AmbientLight(new THREE.Color(1.0, 1.0, 1.0), 0.25);
     scene.add(ambientLight);
@@ -513,8 +513,21 @@ async function main() {
     teapot.geometry.boundsTree = new MeshBVHLib.MeshBVH(teapot.geometry);
     const boundingBox = new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(0, 20, 0), new THREE.Vector3(50, 40, 50));
     const boundingBoxHelper = new THREE.Box3Helper(boundingBox, 0xffff00);
-    const sponza = (await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).setDRACOLoader(new DRACOLoader().setDecoderPath("./")).loadAsync("sponza.glb")).scene;
-    sponza.scale.set(10, 10, 10);
+    const sponza = (await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).setDRACOLoader(new DRACOLoader().setDecoderPath("./")).loadAsync("LittlestTokyo.glb")).scene;
+    sponza.scale.set(0.25, 0.25, 0.25);
+    sponza.traverse(object => {
+        if (object.isMesh && object.material) {
+            if (object.material.color.r === 0.01361838816699617) {
+                object.visible = false;
+            }
+            /*if (object.material.side === THREE.FrontSide) {
+                object.material.side = THREE.DoubleSide;
+            } else if (object.material.side === THREE.BackSide) {
+                console.log("Ye")
+                object.visible = false;
+            }*/
+        }
+    })
     sponza.traverse(o => {
         if (o.material instanceof THREE.MeshPhysicalMaterial) {
             const oldMat = o.material;
@@ -549,7 +562,6 @@ async function main() {
         if (object.material) {
             object.material.envMap = environment;
             object.material.envMapIntensity = 1.0;
-            object.material.side = THREE.DoubleSide;
         }
     });
     scene.add(sponza);
